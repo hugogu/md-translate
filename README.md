@@ -106,9 +106,21 @@ md-translate docs/guide.md -o docs/guide.test.md --engine echo
 ### 2. Model Context Protocol (MCP) for AI Agents
 
 `md-translate` provides a native **Zero-Copy / Claim-Check** MCP server.  
-Instead of pushing megabytes of raw Markdown text through the agent's context window, the Agent merely hands off the local file paths. The translation executes directly on your local GPU/Metal unified memory and writes to the destination path.
+Instead of pushing megabytes of raw Markdown text through the agent's context window, the Agent merely hands off local file paths. The translation executes directly on your local GPU/Metal unified memory and writes to the destination path.
 
-#### Add to your Claude Desktop or Cursor configuration (`claude_desktop_config.json`):
+#### 🤖 Method 1: Prompt-Driven Installation (Recommended)
+
+You don't need to manually locate or edit config files. Simply paste the prompt below to your AI Agent (Cursor, Claude Code, Antigravity, Roo Code, etc.):
+
+> *"Please install and register the `md-translate` MCP server from `https://github.com/hugogu/md-translate` into my environment. Clone or install it in a local virtual environment with `[mcp]` support, and add the `md-translate` entry into my MCP configuration file."*
+
+The Agent will inspect your environment, install the dependencies, and configure your MCP JSON automatically.
+
+---
+
+#### 🛠️ Method 2: Manual Configuration (Claude Desktop / Cursor)
+
+If configuring manually, add this entry to your `claude_desktop_config.json` or `mcp_config.json`:
 
 ```json
 {
