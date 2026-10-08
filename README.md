@@ -14,10 +14,6 @@
   <a href="https://github.com/astral-sh/uv"><img src="https://img.shields.io/badge/package%20manager-uv-blueviolet?style=flat-square" alt="uv friendly"></a>
 </p>
 
-<p align="center">
-  <sub>Inspired by the scientific document translation pipeline of <a href="https://github.com/PDFMathTranslate/PDFMathTranslate">PDFMathTranslate</a>.</sub>
-</p>
-
 ---
 
 ## 💡 Why md-translate?
