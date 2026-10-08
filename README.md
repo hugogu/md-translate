@@ -1,81 +1,178 @@
-# md-translate
+<p align="center">
+  <img src="assets/logo.svg" alt="md-translate Banner" width="100%">
+</p>
 
-> Production-grade, zero-leak Markdown translation engine designed for **CLI, CI/CD, and Autonomous AI Agents (MCP)**.
-> Inspired by the architecture of [PDFMathTranslate](https://github.com/PDFMathTranslate/PDFMathTranslate).
+<p align="center">
+  <b>A zero-loss Markdown & LaTeX translation engine designed for local hardware acceleration (Apple Silicon / CUDA), CLI, CI/CD, and Autonomous AI Agents (MCP).</b>
+</p>
 
----
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="MIT License"></a>
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.10%2B-brightgreen.svg?style=flat-square" alt="Python 3.10+"></a>
+  <a href="https://modelcontextprotocol.io/"><img src="https://img.shields.io/badge/protocol-MCP%20Ready-6366f1.svg?style=flat-square" alt="MCP Ready"></a>
+  <a href="https://github.com/hugogu/md-translate/stargazers"><img src="https://img.shields.io/github/stars/hugogu/md-translate?style=flat-square&color=yellow" alt="GitHub stars"></a>
+  <a href="https://github.com/astral-sh/uv"><img src="https://img.shields.io/badge/package%20manager-uv-blueviolet?style=flat-square" alt="uv friendly"></a>
+</p>
 
-## 🌟 Key Features
-
-1. **Strict Markdown & LaTeX Protection**:
-   - **Formulas preserved**: `$...$` (inline math) and `$$...$$` (display math) are shielded.
-   - **Code & Syntax**: Fenced code blocks (```` ``` ````), inline code (`` ` ``), and image syntax are untouched.
-   - **Tables intact**: Cell borders (`|`), dividers, and alignments remain 100% valid CommonMark.
-2. **Local Hardware Acceleration (Apple Silicon / CUDA)**:
-   - Built-in support for **Apple Silicon Metal (MPS)** on Mac M2/M3/M4 Max chips.
-   - Powered by Meta's open-source `facebook/nllb-200-distilled-600M` and `CTranslate2` (INT8 quantized).
-   - Zero API subscription fees, 100% offline and confidential.
-3. **Zero-Copy / Claim-Check Architecture for AI Agents (MCP)**:
-   - Provides a native **Model Context Protocol (MCP)** server.
-   - AI Agents only exchange file handles (`input_path` $\rightarrow$ `output_path`), meaning **no large Markdown texts pollute the LLM's context window**, saving 99% of prompt tokens.
-4. **Multi-Interface Usability**:
-   - **Python Library**: Clean API for scripts and microservices.
-   - **Command Line (CLI)**: Single files or batch directory translation with recursive scanning.
-   - **CI/CD Integration**: Ready for automated GitHub Actions documentation sync.
+<p align="center">
+  <sub>Inspired by the scientific document translation pipeline of <a href="https://github.com/PDFMathTranslate/PDFMathTranslate">PDFMathTranslate</a>.</sub>
+</p>
 
 ---
 
-## 🚀 Quick Start
+## 💡 Why md-translate?
 
-### 1. Installation
+Most automated translation tools treat Markdown files as simple plain text. When translated by standard models or external APIs, you inevitably encounter:
+- ❌ **Destroyed LaTeX math**: Variable indices, symbols (`\alpha`, `\sum`), and sub/superscripts get scrambled.
+- ❌ **Broken code blocks**: Code comments, identifiers, and indentations are mangled or partially translated.
+- ❌ **Misaligned tables**: Border pipes (`|`) and alignments (`|:---|`) are stripped or distorted.
+- ❌ **Agent Context Overflow**: Feeding entire technical documentation files directly into LLM chats explodes token costs and exceeds context windows.
+
+**`md-translate` solves this completely.** It uses an AST-aware **`MarkdownProtector`** that extracts and isolates structural elements before translation, performs sentence-level neural translation on pure prose using **local hardware acceleration (M2/M3/M4 Max Metal MPS or Nvidia CUDA)**, and reassembles perfectly formatted Markdown with zero layout damage.
+
+---
+
+## ✨ Side-by-Side Comparison (Real Example)
+
+Here is a real example showing how a complex technical document is handled:
+
+### 📄 Input Document (`sample.en.md`)
+
+````markdown
+# Deep Learning Quickstart
+
+> Loss convergence is guaranteed when learning rate $\eta \le \frac{2}{\lambda_{\max}(H)}$.
+
+Here is our primary loss function with regularization:
+$$
+\mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^N \ell(y_i, f(x_i; \theta)) + \frac{\lambda}{2} \|\theta\|_2^2
+$$
+
+### Execution Script
+```python
+def train_step(model, optimizer, batch):
+    # Backward pass with automatic differentiation
+    loss = model.compute_loss(batch)
+    loss.backward()
+    optimizer.step()
+    return loss.item()
+```
+
+### Performance Matrix
+| Optimizer | Throughput | Convergence (Steps) | Status |
+| :--- | :--- | :--- | :--- |
+| SGD + Momentum | 450 samples/s | ~12,000 | Baseline |
+| AdamW (Ours) | **820 samples/s** | **~4,200** | `Recommended` |
+
+For more details, check [Documentation](https://pytorch.org) or visit ![Architecture](https://example.com/arch.png).
+````
+
+---
+
+### 🌐 Output Document (`sample.zh.md`)
+
+````markdown
+# 深度学习快速入门
+
+> 当学习率 $\eta \le \frac{2}{\lambda_{\max}(H)}$ 时，保证损失收敛。
+
+这是带有正则化项的核心损失函数：
+$$
+\mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^N \ell(y_i, f(x_i; \theta)) + \frac{\lambda}{2} \|\theta\|_2^2
+$$
+
+### 执行脚本
+```python
+def train_step(model, optimizer, batch):
+    # Backward pass with automatic differentiation
+    loss = model.compute_loss(batch)
+    loss.backward()
+    optimizer.step()
+    return loss.item()
+```
+
+### 性能指标对比
+| 优化器 | 吞吐量 | 收敛速度 (步数) | 状态 |
+| :--- | :--- | :--- | :--- |
+| SGD + Momentum | 450 samples/s | ~12,000 | 基准 |
+| AdamW (Ours) | **820 samples/s** | **~4,200** | `Recommended` |
+
+获取更多详细信息，请查看 [Documentation](https://pytorch.org) 或访问 ![Architecture](https://example.com/arch.png)。
+````
+
+> **Notice**: Formulas ($ and $$), Python code fences, table alignment bars, Markdown links, and image URLs are preserved byte-for-byte!
+
+---
+
+## ⚡ High-Speed Installation (with `uv` & `pip`)
+
+We strongly recommend [`uv`](https://github.com/astral-sh/uv), the ultra-fast Python package installer.
+
+### Method 1: Using `uv` (Recommended — 10x-100x Faster)
 
 ```bash
 # Clone the repository
 git clone https://github.com/hugogu/md-translate.git
 cd md-translate
 
-# Install core CLI
-pip install -e .
+# Create a clean virtual environment & install md-translate
+uv venv
+source .venv/bin/activate
 
-# Install with Local Hardware Acceleration (PyTorch + MPS/CUDA)
-pip install -e ".[nllb]"
+# Install core CLI with local Apple Silicon / CUDA acceleration
+uv pip install -e ".[nllb]"
 
-# Install with MCP Server support
-pip install -e ".[mcp]"
+# If you want MCP server support for Claude / Cursor Agents:
+uv pip install -e ".[mcp]"
+```
 
-# Or install everything
+### Method 2: Standard `pip`
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install all features
 pip install -e ".[all]"
 ```
 
 ---
 
-## 🛠️ Usage
+## 🖥️ Hardware Acceleration & Environment Handling
+
+`md-translate` auto-detects your platform and enables optimal hardware acceleration out of the box:
+
+| Hardware Environment | Auto-Detected Device | Engine / Precision | Notes |
+| :--- | :--- | :--- | :--- |
+| **Apple Silicon (M1/M2/M3/M4 Max/Pro)** | `mps` (Metal Performance Shaders) | `float16` | **Zero config required**. Ultra-fast unified memory inference. |
+| **Nvidia GPUs (Linux / Windows)** | `cuda` | `float16` / `bfloat16` | Requires CUDA PyTorch. High-throughput batch processing. |
+| **CPU / GitHub Actions Runners** | `cpu` | `int8` (CTranslate2) or `float32` | Ideal for CI/CD environments with zero GPU availability. |
+
+---
+
+## 🚀 Usage
 
 ### 1. Command-Line (CLI)
 
-#### Translate a single Markdown file:
 ```bash
-# Translates README.md to README.zh.md using local NLLB model
+# 1. Translate a single document
 md-translate README.md -o README.zh.md --from en --to zh
-```
 
-#### Batch translate an entire docs directory:
-```bash
+# 2. Batch translate an entire knowledge base / directory recursively
 md-translate ./docs -o ./docs_zh --from en --to zh --recursive
-```
 
-#### Dry-run / Offline test (without downloading model weights):
-```bash
-md-translate README.md -o README.test.md --engine echo
+# 3. Dry-run test (verify markdown preservation without downloading model weights)
+md-translate docs/guide.md -o docs/guide.test.md --engine echo
 ```
 
 ---
 
 ### 2. Model Context Protocol (MCP) for AI Agents
 
-`md-translate` exposes a standard MCP server for Claude Desktop, Cursor, Roo-Code, or any MCP-compatible Agent runtime.
+`md-translate` provides a native **Zero-Copy / Claim-Check** MCP server.  
+Instead of pushing megabytes of raw Markdown text through the agent's context window, the Agent merely hands off the local file paths. The translation executes directly on your local GPU/Metal unified memory and writes to the destination path.
 
-#### Configure in Claude Desktop / Agent (`claude_desktop_config.json`):
+#### Add to your Claude Desktop or Cursor configuration (`claude_desktop_config.json`):
 
 ```json
 {
@@ -88,17 +185,20 @@ md-translate README.md -o README.test.md --engine echo
 }
 ```
 
-#### How the Agent interacts with it (Zero Token Waste):
+#### How the Agent calls it:
+```json
+{
+  "tool": "translate_markdown_file",
+  "arguments": {
+    "input_file_path": "/Users/gqq/kb/architecture.md",
+    "output_file_path": "/Users/gqq/kb/architecture_zh.md",
+    "engine": "nllb",
+    "src_lang": "en",
+    "tgt_lang": "zh"
+  }
+}
 ```
-Agent: translate_markdown_file(
-  input_file_path="/tmp/kb/architecture.md",
-  output_file_path="/tmp/kb/architecture_zh.md",
-  engine="nllb",
-  src_lang="en",
-  tgt_lang="zh"
-)
-```
-> The entire document is processed on your **Mac M2 GPU** and saved directly to the file system. The agent only receives the status and file size summary, ensuring massive knowledge bases can be migrated seamlessly.
+> **Result**: Consumes fewer than 50 tokens per page, enabling autonomous agents to translate entire libraries of documentation without context truncation or rate-limit penalties.
 
 ---
 
@@ -107,18 +207,18 @@ Agent: translate_markdown_file(
 ```python
 from md_translate import translate_markdown, translate_file
 
-# Translate in-memory string
-markdown_text = "# Machine Learning\n\nLoss formula: $L = (y - \\hat{y})^2$"
-translated = translate_markdown(markdown_text, translator="nllb", src_lang="en", tgt_lang="zh")
+# In-memory translation
+doc = "# Overview\n\nEuler's identity: $e^{i\\pi} + 1 = 0$ is elegant."
+translated = translate_markdown(doc, translator="nllb", src_lang="en", tgt_lang="zh")
 print(translated)
 
-# Translate files
-translate_file("input.md", "output.md", translator="nllb", src_lang="en", tgt_lang="zh")
+# File-to-file translation
+translate_file("input.md", "output.zh.md", translator="nllb", src_lang="en", tgt_lang="zh")
 ```
 
 ---
 
-## 🏛️ Architecture
+## 🧩 Architecture
 
 ```
                           ┌────────────────────────┐
@@ -131,7 +231,7 @@ translate_file("input.md", "output.md", translator="nllb", src_lang="en", tgt_la
                      ┌────────────────┴───────────────┐
                      │                                │
              Protected Sentinels               Pure Prose Slices
-             (U+2063 Shields)                  (Sentence Split)
+          (Invisible U+2063 Shields)            (Sentence Split)
                      │                                │
                      │                 [Translation Engine]
                      │                 (NLLB on M2 MPS / CT2 / LLM)
@@ -147,6 +247,29 @@ translate_file("input.md", "output.md", translator="nllb", src_lang="en", tgt_la
 
 ---
 
+## 🗺️ Roadmap
+
+- [x] Strict formula, table, link, and code block preservation
+- [x] Apple Silicon Metal (MPS) and Nvidia CUDA hardware acceleration
+- [x] Zero-Copy / Claim-Check Model Context Protocol (MCP) server
+- [x] Recursive batch CLI translation
+- [ ] Translation caching via SHA-256 diffing (re-translate only modified paragraphs)
+- [ ] Interactive Web UI / Electron companion desktop app
+- [ ] Support for custom glossaries and technical terminology dictionaries
+
+---
+
+## 🤝 Contributing
+
+Contributions are warmly welcomed! Please read [CONTRIBUTING.md](CONTRIBUTING.md) to get started.
+
+```bash
+# Run tests locally
+python3 -c "import sys; sys.path.insert(0, 'src'); from tests.test_translation import test_markdown_protector_integrity, test_full_pipeline_with_echo_engine; test_markdown_protector_integrity(); test_full_pipeline_with_echo_engine(); print('PASS')"
+```
+
+---
+
 ## 📄 License
 
-MIT License. Free forever for personal and commercial use.
+This project is licensed under the [MIT License](LICENSE). Free for personal, academic, and commercial use.
