@@ -44,32 +44,37 @@ A side-by-side comparison illustrating how `md-translate` preserves LaTeX formul
 
 We strongly recommend [`uv`](https://github.com/astral-sh/uv), the ultra-fast Python package installer.
 
-### Method 1: Using `uv` (Recommended — 10x-100x Faster)
+### 📦 Direct Installation via PyPI (Recommended)
+
+```bash
+# 1. Base CLI installation
+pip install md-translate-mcp
+# or with uv (ultra-fast):
+uv pip install md-translate-mcp
+
+# 2. With Local Apple Silicon (MPS) / Nvidia CUDA acceleration
+pip install "md-translate-mcp[nllb]"
+
+# 3. With Model Context Protocol (MCP) server support
+pip install "md-translate-mcp[mcp]"
+
+# 4. Install everything
+pip install "md-translate-mcp[all]"
+```
+
+---
+
+### 🛠️ Development Installation from Source
 
 ```bash
 # Clone the repository
 git clone https://github.com/hugogu/md-translate.git
 cd md-translate
 
-# Create a clean virtual environment & install md-translate
+# Create venv & install with uv
 uv venv
 source .venv/bin/activate
-
-# Install core CLI with local Apple Silicon / CUDA acceleration
-uv pip install -e ".[nllb]"
-
-# If you want MCP server support for Claude / Cursor Agents:
-uv pip install -e ".[mcp]"
-```
-
-### Method 2: Standard `pip`
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-
-# Install all features
-pip install -e ".[all]"
+uv pip install -e ".[all]"
 ```
 
 ---

@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "md-translate"
+name = "md-translate-mcp"
 version = "0.1.0"
 description = "A production-grade Markdown translation engine with formula, code, and table protection. Supports CLI, CI/CD, local M2/Nvidia hardware acceleration, LLMs, and Model Context Protocol (MCP)."
 readme = "README.md"
