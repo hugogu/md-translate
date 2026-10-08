@@ -1,0 +1,72 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "md-translate"
+version = "0.1.0"
+description = "A production-grade Markdown translation engine with formula, code, and table protection. Supports CLI, CI/CD, local M2/Nvidia hardware acceleration, LLMs, and Model Context Protocol (MCP)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Hugo Gu", email = "hugogu@users.noreply.github.com" },
+]
+keywords = [
+    "markdown",
+    "translation",
+    "nllb",
+    "ctranslate2",
+    "mcp",
+    "llm",
+    "latex",
+    "cli",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Text Processing :: Markup :: Markdown",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "click>=8.1.0",
+    "tqdm>=4.66.0",
+]
+
+[project.optional-dependencies]
+# Local NLLB (PyTorch with MPS / CUDA acceleration)
+nllb = [
+    "torch>=2.0.0",
+    "transformers>=4.38.0",
+    "sentencepiece>=0.1.99",
+]
+# Local CTranslate2 (Super-fast quantized translation)
+ct2 = [
+    "ctranslate2>=4.0.0",
+    "transformers>=4.38.0",
+    "sentencepiece>=0.1.99",
+    "huggingface-hub>=0.20.0",
+]
+# Model Context Protocol support
+mcp = [
+    "mcp>=1.0.0",
+]
+# LLM Providers (OpenAI, Anthropic, Ollama API)
+llm = [
+    "requests>=2.31.0",
+]
+all = [
+    "md-translate[nllb,ct2,mcp,llm]",
+]
+dev = [
+    "pytest>=7.0.0",
+    "ruff>=0.1.0",
+]
+
+[project.scripts]
+md-translate = "md_translate.cli:main"
+md-translate-mcp = "md_translate.mcp_server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/md_translate"]
