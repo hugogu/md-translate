@@ -11,11 +11,16 @@ from .translators.base import _TRANSLATOR_REGISTRY
 
 def main():
     try:
-        from mcp.server.fastmcp import FastMCP
+        try:
+            # mcp 2.x API
+            from mcp.server.mcpserver import MCPServer as FastMCP
+        except ImportError:
+            # mcp 1.x API
+            from mcp.server.fastmcp import FastMCP
     except ImportError:
         print(
             "Error: 'mcp' package is required to run the MCP server.\n"
-            "Install it via: pip install 'md-translate[mcp]'",
+            "Install it via: pip install 'md-translate-mcp[mcp]'",
             file=sys.stderr
         )
         sys.exit(1)
