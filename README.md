@@ -32,78 +32,15 @@ Most automated translation tools treat Markdown files as simple plain text. When
 
 ---
 
-## ✨ Side-by-Side Comparison (Visual Demonstration)
+## 🖼️ Showcase & Examples
 
-The following side-by-side view demonstrates how `md-translate` preserves formulas, code blocks, tables, and links without corrupting the Markdown layout:
+A side-by-side comparison illustrating how `md-translate` preserves LaTeX formulas, tables, blockquotes, and links with zero structural layout damage:
 
-<table>
-<tr>
-<th width="50%">📄 Original English (Input)</th>
-<th width="50%">🌐 Translated Chinese (Output)</th>
-</tr>
-<tr>
-<td valign="top">
+<p align="center">
+  <img src="assets/showcase.png" alt="md-translate Translation Showcase" width="100%">
+</p>
 
-### Deep Learning Quickstart
-
-> Loss convergence is guaranteed when learning rate $\eta \le \frac{2}{\lambda_{\max}(H)}$.
-
-Here is our primary loss function with regularization:
-$$\mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^N \ell(y_i, f(x_i; \theta)) + \frac{\lambda}{2} \|\theta\|_2^2$$
-
-#### Execution Script
-```python
-def train_step(model, optimizer, batch):
-    # Backward pass with automatic differentiation
-    loss = model.compute_loss(batch)
-    loss.backward()
-    optimizer.step()
-    return loss.item()
-```
-
-#### Performance Matrix
-| Optimizer | Throughput | Convergence | Status |
-| :--- | :--- | :--- | :--- |
-| SGD + Mom | 450 samp/s | ~12,000 steps | Baseline |
-| AdamW (Ours) | **820 samp/s** | **~4,200 steps** | `Recommended` |
-
-For more details, check [Documentation](https://pytorch.org) or see the architecture diagram below:  
-<img src="https://raw.githubusercontent.com/hugogu/md-translate/main/assets/logo.svg" width="100%" alt="Architecture">
-
-</td>
-<td valign="top">
-
-### 深度学习快速入门
-
-> 当学习率 $\eta \le \frac{2}{\lambda_{\max}(H)}$ 时，保证损失收敛。
-
-这是带有正则化项的核心损失函数：
-$$\mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^N \ell(y_i, f(x_i; \theta)) + \frac{\lambda}{2} \|\theta\|_2^2$$
-
-#### 执行脚本
-```python
-def train_step(model, optimizer, batch):
-    # Backward pass with automatic differentiation
-    loss = model.compute_loss(batch)
-    loss.backward()
-    optimizer.step()
-    return loss.item()
-```
-
-#### 性能指标对比
-| 优化器 | 吞吐量 | 收敛速度 | 状态 |
-| :--- | :--- | :--- | :--- |
-| SGD + Mom | 450 samp/s | ~12,000 steps | 基准 |
-| AdamW (Ours) | **820 samp/s** | **~4,200 steps** | `Recommended` |
-
-获取更多详细信息，请查看 [Documentation](https://pytorch.org) 或参见如下架构图：  
-<img src="https://raw.githubusercontent.com/hugogu/md-translate/main/assets/logo.svg" width="100%" alt="Architecture">
-
-</td>
-</tr>
-</table>
-
-> 💡 **Notice**: In the rendered table above, inline formulas (`$\eta$`), display equations (`$$...$$`), Python code comments/keywords, table column alignment, and hyperlinked URLs are 100% identical and undamaged.
+> 💡 **Notice**: Inline formulas (`$\eta$`), display equations (`$$...$$`), table borders, alignments, and hyperlinked URLs are 100% identical and undamaged.
 
 ---
 
@@ -256,6 +193,8 @@ translate_file("input.md", "output.zh.md", translator="nllb", src_lang="en", tgt
 - [x] Apple Silicon Metal (MPS) and Nvidia CUDA hardware acceleration
 - [x] Zero-Copy / Claim-Check Model Context Protocol (MCP) server
 - [x] Recursive batch CLI translation
+- [ ] **Multi-language Code Comments Translation** (Translate comments inside `#`, `//`, `/* */` while keeping syntax intact)
+- [ ] **HTML & Web Documentation Translation** (Direct translation support for `.html` files & Sphinx/Docusaurus docs)
 - [ ] Translation caching via SHA-256 diffing (re-translate only modified paragraphs)
 - [ ] Interactive Web UI / Electron companion desktop app
 - [ ] Support for custom glossaries and technical terminology dictionaries
