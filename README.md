@@ -32,23 +32,26 @@ Most automated translation tools treat Markdown files as simple plain text. When
 
 ---
 
-## ✨ Side-by-Side Comparison (Real Example)
+## ✨ Side-by-Side Comparison (Visual Demonstration)
 
-Here is a real example showing how a complex technical document is handled:
+The following side-by-side view demonstrates how `md-translate` preserves formulas, code blocks, tables, and links without corrupting the Markdown layout:
 
-### 📄 Input Document (`sample.en.md`)
+<table>
+<tr>
+<th width="50%">📄 Original English (Input)</th>
+<th width="50%">🌐 Translated Chinese (Output)</th>
+</tr>
+<tr>
+<td valign="top">
 
-````markdown
-# Deep Learning Quickstart
+### Deep Learning Quickstart
 
 > Loss convergence is guaranteed when learning rate $\eta \le \frac{2}{\lambda_{\max}(H)}$.
 
 Here is our primary loss function with regularization:
-$$
-\mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^N \ell(y_i, f(x_i; \theta)) + \frac{\lambda}{2} \|\theta\|_2^2
-$$
+$$\mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^N \ell(y_i, f(x_i; \theta)) + \frac{\lambda}{2} \|\theta\|_2^2$$
 
-### Execution Script
+#### Execution Script
 ```python
 def train_step(model, optimizer, batch):
     # Backward pass with automatic differentiation
@@ -58,30 +61,26 @@ def train_step(model, optimizer, batch):
     return loss.item()
 ```
 
-### Performance Matrix
-| Optimizer | Throughput | Convergence (Steps) | Status |
+#### Performance Matrix
+| Optimizer | Throughput | Convergence | Status |
 | :--- | :--- | :--- | :--- |
-| SGD + Momentum | 450 samples/s | ~12,000 | Baseline |
-| AdamW (Ours) | **820 samples/s** | **~4,200** | `Recommended` |
+| SGD + Mom | 450 samp/s | ~12,000 steps | Baseline |
+| AdamW (Ours) | **820 samp/s** | **~4,200 steps** | `Recommended` |
 
-For more details, check [Documentation](https://pytorch.org) or visit ![Architecture](https://example.com/arch.png).
-````
+For more details, check [Documentation](https://pytorch.org) or see the architecture diagram below:  
+<img src="https://raw.githubusercontent.com/hugogu/md-translate/main/assets/logo.svg" width="100%" alt="Architecture">
 
----
+</td>
+<td valign="top">
 
-### 🌐 Output Document (`sample.zh.md`)
-
-````markdown
-# 深度学习快速入门
+### 深度学习快速入门
 
 > 当学习率 $\eta \le \frac{2}{\lambda_{\max}(H)}$ 时，保证损失收敛。
 
 这是带有正则化项的核心损失函数：
-$$
-\mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^N \ell(y_i, f(x_i; \theta)) + \frac{\lambda}{2} \|\theta\|_2^2
-$$
+$$\mathcal{L}(\theta) = \frac{1}{N} \sum_{i=1}^N \ell(y_i, f(x_i; \theta)) + \frac{\lambda}{2} \|\theta\|_2^2$$
 
-### 执行脚本
+#### 执行脚本
 ```python
 def train_step(model, optimizer, batch):
     # Backward pass with automatic differentiation
@@ -91,16 +90,20 @@ def train_step(model, optimizer, batch):
     return loss.item()
 ```
 
-### 性能指标对比
-| 优化器 | 吞吐量 | 收敛速度 (步数) | 状态 |
+#### 性能指标对比
+| 优化器 | 吞吐量 | 收敛速度 | 状态 |
 | :--- | :--- | :--- | :--- |
-| SGD + Momentum | 450 samples/s | ~12,000 | 基准 |
-| AdamW (Ours) | **820 samples/s** | **~4,200** | `Recommended` |
+| SGD + Mom | 450 samp/s | ~12,000 steps | 基准 |
+| AdamW (Ours) | **820 samp/s** | **~4,200 steps** | `Recommended` |
 
-获取更多详细信息，请查看 [Documentation](https://pytorch.org) 或访问 ![Architecture](https://example.com/arch.png)。
-````
+获取更多详细信息，请查看 [Documentation](https://pytorch.org) 或参见如下架构图：  
+<img src="https://raw.githubusercontent.com/hugogu/md-translate/main/assets/logo.svg" width="100%" alt="Architecture">
 
-> **Notice**: Formulas ($ and $$), Python code fences, table alignment bars, Markdown links, and image URLs are preserved byte-for-byte!
+</td>
+</tr>
+</table>
+
+> 💡 **Notice**: In the rendered table above, inline formulas (`$\eta$`), display equations (`$$...$$`), Python code comments/keywords, table column alignment, and hyperlinked URLs are 100% identical and undamaged.
 
 ---
 
